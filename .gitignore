@@ -35,3 +35,4 @@ terraform.rc
 
 vpn_ssh
 vpn_ssh.pub
+*.ovpn
