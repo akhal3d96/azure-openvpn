@@ -12,7 +12,8 @@ resource "azurerm_virtual_network" "vpn_network" {
   name                = var.vpn_network_name
   resource_group_name = azurerm_resource_group.vpn_resource_group.name
   location            = azurerm_resource_group.vpn_resource_group.location
-  # 256 IP
+
+  # 192.168.X.X
   address_space = ["192.168.0.0/16"]
 }
 
@@ -22,8 +23,10 @@ resource "azurerm_subnet" "vpn_subnet" {
   name                 = var.vpn_subnet_name
   resource_group_name  = azurerm_resource_group.vpn_resource_group.name
   virtual_network_name = azurerm_virtual_network.vpn_network.name
-  # 192.168.0.1 - 192.168.0.3
-  address_prefixes = ["192.168.1.0/24"]
+
+  # 192.168.1.0 - 192.168.1.7
+  # 5 Azure reserved + 3 Available
+  address_prefixes = ["192.168.1.0/29"]
 }
 
 
