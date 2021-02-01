@@ -48,10 +48,6 @@ resource "azurerm_public_ip" "vpn_public_ip" {
   resource_group_name = azurerm_resource_group.vpn_resource_group.name
   location            = azurerm_resource_group.vpn_resource_group.location
   allocation_method   = "Static"
-
-  tags = {
-    environment = "VPN Public IP"
-  }
 }
 
 
