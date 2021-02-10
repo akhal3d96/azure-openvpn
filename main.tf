@@ -17,6 +17,47 @@ resource "azurerm_virtual_network" "vpn_network" {
   address_space = ["192.168.0.0/16"]
 }
 
+resource "azurerm_network_security_group" "vpn_security_group" {
+  name                = "vpn_security_group"
+  location            = azurerm_resource_group.vpn_resource_group.location
+  resource_group_name = azurerm_resource_group.vpn_resource_group.name
+}
+
+resource "azurerm_network_security_rule" "vpn_server_openvpn" {
+  name                        = "openvpn"
+  priority                    = 100
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "443"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.vpn_resource_group.name
+  network_security_group_name = azurerm_network_security_group.vpn_security_group.name
+
+}
+
+resource "azurerm_network_security_rule" "vpn_server_ssh" {
+  name                        = "ssh"
+  priority                    = 101
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "22"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.vpn_resource_group.name
+  network_security_group_name = azurerm_network_security_group.vpn_security_group.name
+
+}
+
+
+resource "azurerm_network_interface_security_group_association" "example" {
+  network_interface_id      = azurerm_network_interface.vpn_nic.id
+  network_security_group_id = azurerm_network_security_group.vpn_security_group.id
+}
 
 
 resource "azurerm_subnet" "vpn_subnet" {
